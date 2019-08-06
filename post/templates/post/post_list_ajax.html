@@ -1,0 +1,92 @@
+{% load humanize %}
+{% load post_extras %} {# custom filter 추가 #}
+{% load static %}
+
+{% for post in posts %}
+<article class="post-wrap">
+  <header>
+    <a class="user-title" href="{% url "post:my_post_list" post.author.username %}">
+    {% if post.author.profile.picture %}
+    <img class="user-pic" src="{{ post.author.profile.picture.url }}" alt="프로필사진">
+    {% else %}
+    <img class="user-pic" src="{% static 'images/default/default.jpg' %}" alt="프로필사진">
+    {% endif %}
+    <span class="post-username">{{ post.author.profile.nickname  }}</span>
+    </a>
+    <span class="pull-right">
+      {% if user.profile in post.author.profile.get_follower %}
+      {# {% if post.author.profile in user_profile.follow_set.all %}#}
+      <input class="follow following-btn" type="submit" value="팔로잉" name="{{ post.author.profile.id }}">
+      {% else %}
+      <input class="follow follow-btn" type="submit" value="팔로우" name="{{ post.author.profile.id }}">
+      {% endif %}
+    </span>
+    {% if post.author == user %}
+    <span class=pull-right>
+      <a class="post-edit" href="{% url "post:post_edit" post.pk %}">수정</a>
+      <form class="post-delete-form" action="{% url "post:post_delete" post.pk %}" method="post">
+        {% csrf_token %}
+        <input class="post-delete" type="submit" value="삭제" onclick="return confirm('정말 삭제하시겠습니까?')">
+      </form>
+    </span>
+    {% endif %}
+  </header>
+  <img src="{{ post.photo.url }}" alt="{{ post.author }}'s photo">
+  <div class="post-content">
+    {% if user in post.like_user_set.all %}
+    <input type="button" class="like liked" name="{{ post.id }}">
+    {% else %}
+    <input type="button" class="like to-like" name="{{ post.id }}">
+    {% endif %}
+    <input type="button" class="commnet-icon" name="{{ post.id }}">
+
+    <p class="like-count" id="count-{{ post.id }}">좋아요 {{ post.like_count }}개</p>
+
+    <p id="like-user-{{post.id}}">
+    {% if post.like_count != 0 %}
+      {% if post.like_user_set.all %}
+      {% for like_user in post.like_user_set.all %}
+      {{ like_user.profile.nickname }}
+      {% endfor %}
+      님이 좋아합니다.
+      {% endif %}
+    {% endif %}
+    </p>
+
+    <span class="post-username">{{ post.author.profile.nickname }}</span>
+    <span>{{ post|add_link|safe|linebreaksbr }}</span>
+    <div class="time">
+    {{ post.created_at|naturaltime }}
+    </div>
+
+
+
+    {% if post.comment_set.all.count > 4 %}
+    <input type="button" class="comment-more" name="{{ post.id }}" value="댓글 더 보기">
+    {% endif %}
+    <div id="comment-list-ajax-post{{post.id}}"></div>
+    {% for comment in post.comment_set.all|slice:":4" %}
+    <div id="comment{{ comment.id }}">
+
+      <span class="comment-username">{{ comment.author.profile.nickname }}</span> {{ comment.content }}
+      {% if user == comment.author %}
+      <input type="button" class="del-comment" value="삭제" name="{{ comment.id }}">
+      {% endif %}
+
+    </div>
+    {% endfor %}
+    <div id="comment-more-{{post.id}}"></div>
+
+
+    <div id="add-comment-post{{post.id}}" class="add-comment-wrap">
+    {% if user.is_authenticated %}
+      {{ comment_form }}
+      <input type="button" class="add-comment add-comment-btn" name="{{ post.id }}" value="게시">
+    {% else %}
+      {{ comment_form }}
+      <input type="button" class="add-comment-btn" name="{{ post.id }}" value="게시" onclick="alert('댓글을 작성하려면 로그인이 필요합니다.')">
+    {% endif %}
+    </div>
+  </div>
+  </article>
+  {% endfor %}

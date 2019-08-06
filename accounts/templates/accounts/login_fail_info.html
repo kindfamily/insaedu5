@@ -1,0 +1,31 @@
+{% extends "accounts/layout.html" %}
+
+{% block title %}
+로그인 | Instagram
+{% endblock %}
+
+{% block content %}
+
+<div class="form-container">
+  <div class="form">
+    <h1 class="title">Instagram</h1>
+    <h2>어익후!! 로그인에 실패했어유 o(>_<)o sorry</h2>
+
+    <p class="signup-link">아이디가 없다구요?!!
+      <a href="{% url "accounts:signup" %}"> 회원가입</a>
+    <p>
+      다시 도전할 용자라면 !!
+      <a href="{% url "accounts:login" %}">다시로그인</a>
+    </p>
+
+
+
+  </div>
+  <div class="shortcut">
+    <p class="signup-link">테스트계정도 있어요 </a></p>
+    <p class="signup-link test-account">테스트 사용자명 : test / 비밀번호 : test2019</p>
+  </div>
+
+
+</div>
+{% endblock %}

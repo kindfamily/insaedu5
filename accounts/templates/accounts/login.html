@@ -1,0 +1,34 @@
+{% extends "accounts/layout.html" %}
+
+{% block title %}
+로그인 | Instagram
+{% endblock %}
+
+{% block content %}
+
+<div class="form-container">
+  <div class="form">
+    <h1 class="title">Instagram</h1>
+    <form method="POST" action="{% url 'accounts:login' %}">
+      {% csrf_token %}
+
+      <p>
+        <label for="id_username">사용자명:</label>
+        <input id="{{ form.username.id_for_label }}" maxlength="15" name="{{ form.username.html_name }}">
+      </p>
+      <p>
+        <label for="id_username">비밀번호:</label>
+        <input id="{{ form.password.id_for_label }}" maxlength="120" name="{{ form.password.html_name }}" type="password">
+      </p>
+      <input class="submit_btn" type="submit" value="로그인">
+    </form>
+  </div>
+  <div class="shortcut">
+
+    <p class="signup-link test-account">테스트 사용자명 : test / 비밀번호 : test2019</p>
+    <p class="signup-link">아이디가 없으신가요? <a href="{% url "accounts:signup" %}">회원가입</a></p>
+  </div>
+
+
+</div>
+{% endblock %}

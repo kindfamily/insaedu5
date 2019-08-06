@@ -1,0 +1,21 @@
+{% extends "accounts/layout.html" %}
+
+{% block title %}
+회원가입 | Instagram
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <div class="form">
+    <h1 class="title">Instagram</h1>
+    <form action="" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+        {{ form.as_p }}
+      <input class="submit_btn" type="submit" value="가입">
+    </form>
+  </div>
+  <div class="shortcut">
+  <p class="link">계정이 있으신가요? <a href="{% url "accounts:login" %}">로그인</a></p>
+  </div>
+</div>
+{% endblock %}
