@@ -50,7 +50,7 @@ class Post(models.Model):
         # count() 데이터의 개수를 샘
 
     def __str__(self):
-        return self.content
+        return str(self.id) + self.content
 
 
 class Tag(models.Model):
@@ -84,3 +84,5 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.content
+
+

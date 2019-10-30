@@ -8,6 +8,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import Comment, Post, Like, Tag
+from accounts.models import Profile
 from .forms import CommentForm, PostForm
 
 
@@ -99,6 +100,8 @@ def my_post_list(request, username):
         .prefetch_related('profile__follower_user__from_user', 'profile__follow_user__to_user')
 
     post_list = user.post_set.all()
+
+
 
     return render(request, 'post/my_post_list.html', {
         'user_profile': user_profile,
@@ -259,6 +262,24 @@ def post_like(request):
 
     return HttpResponse(json.dumps(context), content_type="application/json")
 
+@login_required
+@require_POST  # 해당 뷰는 POST method 만 받는다.
+def post_bookmark(request):
+    pk = request.POST.get('pk', None)
+    profile = get_object_or_404(Profile, pk=pk)
+    post_bookmark, post_bookmark_created = profile.bookmark_set.get_or_create(user=request.user)
+
+    if not post_bookmark_created:
+        profile_bookmark.delete()
+        message = "좋아요 취소"
+    else:
+        message = "좋아요"
+
+    context = {'bookmark_count': profile.user_profiles,
+               'message': message,
+               'nickname': request.user.profile.nickname}
+
+    return HttpResponse(json.dumps(context), content_type="application/json")
 
 @login_required
 def comment_new(request):

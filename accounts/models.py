@@ -80,6 +80,7 @@ from django.db import models
 from imagekit.models import ProcessedImageField # imagekit 이미지 처리를 위해 설치한 패키지 > pip 패키지 사용법 및 설명을 보기 위해서는 https://pypi.org/project/django-imagekit/ 에서 확인가능
 from imagekit.processors import ResizeToFill
 
+
 """
 
     name    : user_path
@@ -164,6 +165,8 @@ class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     nickname = models.CharField('닉네임', max_length=30, unique=True)
 
+    bookmark_set = models.ManyToManyField('post.Post', blank= True, related_name='user_profiles')
+
     # 사용되징 않는것 처럼 보였으나
     # Many-to-Many 관계를 중계하는 역할을 하기 위해 보이지 않는 모델 생성
     follow_set = models.ManyToManyField('self',                         # 자신 모델을 다대다 필드로 가진다
@@ -201,6 +204,12 @@ class Profile(models.Model):
         ?? 그럼 그냥 함수를 추가로 작성하는 것과 무슨차이?
         
     """
+
+    @property
+    def bookmark_count(self):
+        return self.user_profiles.count()
+        # count() 데이터의 개수를 샘
+
 
     @property                                                       # 나를 펄로우한 유저를 for 반복문으로 돌려서 전부 불러와서 담는다
     def get_follower(self):
