@@ -1,4 +1,4 @@
-#!/Users/tuntunkimpo/PycharmProjects/insaedu5/venv/bin/python
+#!/Users/tuntunkimpo/PycharmProjects/insaedu/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

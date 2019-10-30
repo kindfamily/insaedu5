@@ -1,4 +1,4 @@
-#!/Users/tuntunkimpo/PycharmProjects/insaedu5/venv/bin/python
+#!/Users/tuntunkimpo/PycharmProjects/insaedu/venv/bin/python
 # -*- coding: utf8 -*-
 # :Copyright: © 2015 Günter Milde.
 # :License: Released under the terms of the `2-Clause BSD license`_, in short:

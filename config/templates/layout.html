@@ -33,13 +33,10 @@
   <![endif]-->
 </head>
 <body>
-
   <div class="container-fluid">
     <nav class="navbar navbar-default">
       <div class="nav-wrap">
         <a class="logo pull-left" href="/"></a>
-
-
         <form class="search-form" action="{% url "post:post_list" %}" method="post">
           {% csrf_token %}
           <input class="tag-search" type="text" name="tag" placeholder="검색" pattern="#?[\wㄱ-ㅎ|ㅏ-ㅣ|가-힣]+" title="특수문자, 공백 입력불가" required >
@@ -74,4 +71,4 @@
   <!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
   <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 </body>
-</html>,
+</html>

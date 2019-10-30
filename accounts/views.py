@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 # from django.conf import settings
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render, render_to_response
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
 from django.contrib.auth import logout as django_logout
@@ -23,15 +23,15 @@ def login_check(request):
     if request.method == "POST":
         #사용자가 로그인 폼에 입력한 값
         form = LoginForm(request.POST)
-        name = request.POST.get('username')
-        pwd = request.POST.get('password')
+        name = request.POST["username"]
+        pwd = request.POST["password"]
         #인증
         user = authenticate(username=name, password=pwd)
         if user is not None: # 로그인 성공
             login(request, user)
             return redirect("/")
         else: #로그인 실패
-            return render(request, 'accounts/login_fail_info.html')
+            return render(request, "accounts/login.html", {"msg": "아이디 패스워드를 확인해 주세요 ^ ^"})
     else: #get 방식인 경우 - 로그인 페이지로 이동
         form = LoginForm()
         return render(request, 'accounts/login.html', {"form":form})

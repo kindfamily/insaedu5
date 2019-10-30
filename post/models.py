@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db import models
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
-import re  # tag검색할때 정규표현식 기능
+import re
 
 
 def photo_path(instance, filename):
@@ -27,10 +27,10 @@ class Post(models.Model):
     tag_set = models.ManyToManyField('Tag', blank=True)
     like_user_set = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                            blank=True,
-                                           related_name='like_user_set',  # post.like_set 으로 접근 가능
+                                           related_name='like_user_set',
                                            through='Like')  # post.like_set 으로 접근 가능
 
-    class Meta:                 # "모델 메타데이터"란 앞서 보았던 필드 단위의 옵션들과 달리 모델 단위의 옵션이라고 볼 수 있습니다 https://nukggul.tistory.com/17
+    class Meta:
         ordering = ['-created_at']
 
     # NOTE: content에서 tags를 추출하여, Tag 객체 가져오기, 신규 태그는 Tag instance 생성, 본인의 tag_set에 등록,
@@ -47,10 +47,9 @@ class Post(models.Model):
     @property
     def like_count(self):
         return self.like_user_set.count()
-        # count() 데이터의 개수를 샘
 
     def __str__(self):
-        return str(self.id) + self.content
+        return self.content
 
 
 class Tag(models.Model):
@@ -84,5 +83,3 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.content
-
-

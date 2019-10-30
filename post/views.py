@@ -8,7 +8,6 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import Comment, Post, Like, Tag
-from accounts.models import Profile
 from .forms import CommentForm, PostForm
 
 
@@ -57,41 +56,6 @@ def post_list(request, tag=None):
     })
 
 
-# 프로필 화면만 보여줄 것 화면 하나씩 기능 추가하면서 내용 넣기
-# def my_post_list(request, username):
-#     user = get_object_or_404(get_user_model(), username=username)
-#     user_profile = user.profile
-
-#     post_list = user.post_set.all()
-
-#     return render(request, 'post/my_post_list.html', {
-#         'user_profile': user_profile,
-
-#         'post_list': post_list,
-#         'username': username,
-#     })
-
-
-# 프로필 화면만 보여줄 것 화면 하나씩 기능 추가하면서 내용 넣기
-# def post_list(request, tag=None):
-
-#     post_list = Post.objects.all()
-
-#     paginator = Paginator(post_list, 3)
-#     page_num = request.POST.get('page')
-
-#     try:
-#         posts = paginator.page(page_num)
-#     except PageNotAnInteger:
-#         posts = paginator.page(1)
-#     except EmptyPage:
-#         posts = paginator.page(paginator.num_pages)
-
-#     return render(request, 'post/post_list.html', {
-#         'posts': posts
-#     })
-
-
 def my_post_list(request, username):
     user = get_object_or_404(get_user_model(), username=username)
     user_profile = user.profile
@@ -100,8 +64,6 @@ def my_post_list(request, username):
         .prefetch_related('profile__follower_user__from_user', 'profile__follow_user__to_user')
 
     post_list = user.post_set.all()
-
-
 
     return render(request, 'post/my_post_list.html', {
         'user_profile': user_profile,
@@ -262,24 +224,6 @@ def post_like(request):
 
     return HttpResponse(json.dumps(context), content_type="application/json")
 
-@login_required
-@require_POST  # 해당 뷰는 POST method 만 받는다.
-def post_bookmark(request):
-    pk = request.POST.get('pk', None)
-    profile = get_object_or_404(Profile, pk=pk)
-    post_bookmark, post_bookmark_created = profile.bookmark_set.get_or_create(user=request.user)
-
-    if not post_bookmark_created:
-        profile_bookmark.delete()
-        message = "좋아요 취소"
-    else:
-        message = "좋아요"
-
-    context = {'bookmark_count': profile.user_profiles,
-               'message': message,
-               'nickname': request.user.profile.nickname}
-
-    return HttpResponse(json.dumps(context), content_type="application/json")
 
 @login_required
 def comment_new(request):

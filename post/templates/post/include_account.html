@@ -18,34 +18,6 @@
       <li><span class="info-list-title">게시물</span> {{ user.post_set.count }}</li>
       <li><span class="info-list-title">팔로워</span> {{ user.profile.follower_count }}</li>
       <li><span class="info-list-title">팔로우</span> {{ user.profile.following_count }}</li>
-      <li style="border: 1px solid black;"><span class="info-list-title">팔로우리스트</span>
-
-        {% for follower in user.profile.get_follower %}
-
-          <span>{{ follower.nickname }}</span>
-
-          <img src="{{ follower.picture.url }}" alt="">
-
-        {% endfor %}
-
-      </li>
-      <li style="border: 1px solid black;"><span class="info-list-title">북마크리스트</span>
-
-
-
-        {% for post in user.profile.bookmark_set.all %}
-
-          <span>{{ post.picture.url }}</span>
-
-          <img src="{{ post.photo.url }}" alt="">
-
-        {% endfor %}
-          <img src="" alt="">
-
-
-
-      </li>
-
     </ul>
     <p class="about"><span class="nickname">{{ user.profile.nickname }}</span> {{ user.profile.about|urlize }}</p>
     {% endfor %}
